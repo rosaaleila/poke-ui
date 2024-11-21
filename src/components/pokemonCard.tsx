@@ -6,12 +6,12 @@ import { colorsByType } from "utils/colorsByType";
 import { useState } from "react";
 
 interface IPokemonCardProps {
-    name: string
+    name: string;
+    isFocused: boolean;
+    onMouseEnter: () => void;
 }
 
-export const PokemonCard = ({name}: IPokemonCardProps) => {
-    const [isFocused, setIsFocused] = useState(false); 
-
+export const PokemonCard = ({name, isFocused, onMouseEnter}: IPokemonCardProps) => {
     const { data, isLoading, isError } = useQuery({
         queryKey: ["pokemon", name],
         queryFn: ({queryKey}) => {
@@ -36,8 +36,7 @@ export const PokemonCard = ({name}: IPokemonCardProps) => {
             className={`p-6 flex flex-col w-full`}
             style={{ border: isFocused ?  `2px solid ${colorByType}` : '' }}
             key={data.name}
-            onMouseEnter={() => setIsFocused(true)}
-            onMouseLeave={() => setIsFocused(false)}>
+            onMouseEnter={onMouseEnter}>
             <CardHeader>
                 {data.name 
                 ? <img src={data.sprites.front_default} alt={data.name} className={'w-[100px] h-[100px] rounded-[100%]'}/>

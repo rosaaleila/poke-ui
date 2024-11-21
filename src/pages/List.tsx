@@ -8,14 +8,36 @@ import InfiniteScroll from "react-infinite-scroll-component";
 function List() {
     const [searchQuery, setSearchQuery] = useState<string>("");
     const [isSearchFocused, setIsSearchFocused] = useState(false);
+    const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
 
     // Effect adicionado devido a necessidade de um listener da pagina toda
     useEffect(() => {
         const handleGlobalKeyDown = (event: KeyboardEvent) => {
+            // Atalho para focar no input de pesquisa
             if ((event.ctrlKey || event.metaKey) && event.key === "/") {
                 searchInputRef.current?.focus();
                 setIsSearchFocused(true);
+            }
+            
+            if(isSearchFocused) return; // Se estiver no input de pesquisa, pulamos a navegação 
+
+            // Navegação por teclado com as setas, que só é ativa se estiver com um card em foco
+            if(focusedIndex !== null) {
+
+                let newFocusedIndex: number | null = null;
+
+                if (event.key === "ArrowDown") {
+                    // Math.min garante que nunca vamos ultrapassar o indice minimo
+                    newFocusedIndex = Math.min(filteredPokemons.length - 1, focusedIndex + 1); 
+                } else if (event.key === "ArrowUp") {
+                    // Math.max garante que nunca vamos ultrapassar o indice maximo
+                    newFocusedIndex = Math.max(0, focusedIndex - 1);
+                }
+            
+                if (newFocusedIndex !== null) {
+                    setFocusedIndex(newFocusedIndex);
+                }
             }
         };
 
@@ -24,7 +46,7 @@ function List() {
         return () => {
             document.removeEventListener('keydown', handleGlobalKeyDown);
         };
-    }, []);
+    }, [focusedIndex]);
 
     const {
         data,
@@ -47,11 +69,11 @@ function List() {
     );
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div>Carregando...</div>;
     }
 
     if (isError) {
-        return <div>Error loading data.</div>;
+        return <div>Não foi possivel carregar sua pokédex...</div>;
     }
     
     // Filtramos o pokemons de acordo com a query da barra de pesquisa (se houver)
@@ -60,6 +82,11 @@ function List() {
         .filter(pokemon => 
             pokemon.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
+
+    // Setamos a indice do elemento com foco
+    const handleMouseEnter = (index: number) => {
+        setFocusedIndex(index);
+    };
 
     return (
         <div className="flex gap-4 flex-col justify-center items-center p-[5px]">
@@ -70,6 +97,7 @@ function List() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}
+                onBlur={() => setIsSearchFocused(false)}
             />    
   
             <InfiniteScroll
@@ -85,6 +113,8 @@ function List() {
                         <PokemonCard
                             name={pokemon.name}
                             key={index}
+                            isFocused={focusedIndex === index}
+                            onMouseEnter={() => handleMouseEnter(index)}
                         />
                     ))
                 ) : (
