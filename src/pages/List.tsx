@@ -2,11 +2,29 @@ import { getPokemonNames } from "../api/pokemonApi";
 import { PokemonCard } from "components/pokemonCard";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Input } from "components/ui/input";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 function List() {
     const [searchQuery, setSearchQuery] = useState<string>("");
+    const [isSearchFocused, setIsSearchFocused] = useState(false);
+    const searchInputRef = useRef<HTMLInputElement>(null);
+
+    // Effect adicionado devido a necessidade de um listener da pagina toda
+    useEffect(() => {
+        const handleGlobalKeyDown = (event: KeyboardEvent) => {
+            if ((event.ctrlKey || event.metaKey) && event.key === "/") {
+                searchInputRef.current?.focus();
+                setIsSearchFocused(true);
+            }
+        };
+
+        document.addEventListener('keydown', handleGlobalKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleGlobalKeyDown);
+        };
+    }, []);
 
     const {
         data,
@@ -46,10 +64,12 @@ function List() {
     return (
         <div className="flex gap-4 flex-col justify-center items-center p-[5px]">
             <Input 
+                ref={searchInputRef}
                 placeholder="Pesquisar" 
                 className="mt-5 w-[50%]"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setIsSearchFocused(true)}
             />    
   
             <InfiniteScroll

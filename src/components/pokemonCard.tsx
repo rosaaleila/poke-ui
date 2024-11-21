@@ -30,7 +30,7 @@ export const PokemonCard = ({name}: IPokemonCardProps) => {
     const getInitialLetters = () => data.name.split(' ').map(name => name[0]?.toUpperCase() || '').join(' ');
 
     return (
-        <Card className="p-6 flex flex-col w-full">
+        <Card className="p-6 flex flex-col w-full" key={data.name}>
             <CardHeader>
                 {data.name 
                 ? <img src={data.sprites.front_default} alt={data.name} className={'w-[100px] h-[100px] rounded-[100%]'}/>
@@ -44,7 +44,7 @@ export const PokemonCard = ({name}: IPokemonCardProps) => {
             </CardContent>
             <CardContent className="flex gap-2">
                 {data.abilities.map((ability) => (
-                    <Badge style={{'backgroundColor': colorByType}}>{ability.ability.name}</Badge>
+                    <Badge key={ability.ability.name} style={{'backgroundColor': colorByType}}>{ability.ability.name}</Badge>
                 ))}
             </CardContent>
         </Card>
