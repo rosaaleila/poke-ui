@@ -1,46 +1,71 @@
-# Getting Started with Create React App
+# Projeto Pokédex com Pesquisa e Navegação por Teclado
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este projeto é uma aplicação de Pokédex que permite buscar pokémons, exibir uma lista com dados paginados e navegar entre os cards usando as teclas do teclado. A aplicação é construída com React, React Query para gerenciamento de dados, e Infinite Scroll para carregamento infinito de pokémons.
 
-## Available Scripts
+## Funcionalidades
 
-In the project directory, you can run:
+- **Pesquisa:** Permite pesquisar pokémons por nome através de uma barra de pesquisa.
+- **Navegação por Teclado:** Você pode navegar entre os cards de pokémons usando as teclas de seta para cima e para baixo.
+- **Carregamento Infinito:** Novos pokémons são carregados automaticamente conforme você rola para baixo na lista.
+- **Foco nos Cards:** Quando um card de Pokémon é focado (via navegação por teclado ou mouse), ele é destacado visualmente.
 
-### `npm start`
+## Tecnologias Utilizadas
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **React**: Biblioteca principal para a construção da interface de usuário.
+- **React Query**: Para gerenciamento de dados assíncronos com chamadas à API.
+- **Infinite Scroll**: Componente para carregamento infinito de pokémons.
+- **TypeScript**: Para maior segurança e tipagem no código.
+- **Tailwind CSS**: Utilizado para o estilo da aplicação.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Como Rodar o Projeto
 
-### `npm test`
+1. **Clonar o Repositório**
+   ```bash
+   git clone https://github.com/rosaaleila/poke-ui
+   cd poke-ui
+   ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. **Instalar as Dependências**
+   ```bash
+   npm install
+   ```
 
-### `npm run build`
+3. **Rodar o Servidor de Desenvolvimento**
+   ```bash
+   npm run start
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   Isso iniciará a aplicação em [http://localhost:3000](http://localhost:3000).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Como Funciona
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 1. Barra de Pesquisa
 
-### `npm run eject`
+A barra de pesquisa permite que você filtre os pokémons por nome. Assim que você começa a digitar, a lista é filtrada automaticamente, exibindo apenas os pokémons que correspondem à sua consulta.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### 2. Navegação por Teclado
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Você pode usar as setas para cima e para baixo para navegar entre os cards de pokémons. O card focado é destacado visualmente. Você também pode usar o atalho `Ctrl + /` ou `Cmd + /` para focar no campo de pesquisa.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### 3. Carregamento Infinito
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Conforme você rola para baixo, a lista de pokémons vai sendo carregada dinamicamente. Isso é feito utilizando a funcionalidade de carregamento infinito.
 
-## Learn More
+### 4. Foco em Cards
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Quando um card é focado (seja por navegação por teclado ou por hover do mouse), ele é destacado para indicar que está ativo. O foco também pode ser removido ao passar o mouse sobre outro card.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Estrutura do Projeto
+
+A estrutura do projeto segue o padrão típico de uma aplicação React:
+
+```
+/src
+  /components
+    /pokemonCard    # Componente para exibição de um card de Pokémon
+    /ui             # Componentes de interface como Input
+  /api
+    /pokemonApi     # Funções de API para busca de pokémons
+  App.tsx           # Componente principal da aplicação
+  index.tsx         # Arquivo de entrada da aplicação
+```
