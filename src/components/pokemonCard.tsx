@@ -3,12 +3,14 @@ import { useQuery } from "@tanstack/react-query";
 import { getPokemon } from "api/pokemonApi";
 import { Badge } from "./ui/badge";
 import { colorsByType } from "utils/colorsByType";
+import { useState } from "react";
 
 interface IPokemonCardProps {
     name: string
 }
 
 export const PokemonCard = ({name}: IPokemonCardProps) => {
+    const [isFocused, setIsFocused] = useState(false); 
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ["pokemon", name],
@@ -30,7 +32,12 @@ export const PokemonCard = ({name}: IPokemonCardProps) => {
     const getInitialLetters = () => data.name.split(' ').map(name => name[0]?.toUpperCase() || '').join(' ');
 
     return (
-        <Card className="p-6 flex flex-col w-full" key={data.name}>
+        <Card 
+            className={`p-6 flex flex-col w-full`}
+            style={{ border: isFocused ?  `2px solid ${colorByType}` : '' }}
+            key={data.name}
+            onMouseEnter={() => setIsFocused(true)}
+            onMouseLeave={() => setIsFocused(false)}>
             <CardHeader>
                 {data.name 
                 ? <img src={data.sprites.front_default} alt={data.name} className={'w-[100px] h-[100px] rounded-[100%]'}/>
